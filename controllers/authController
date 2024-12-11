@@ -1,0 +1,86 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const sendEmail = require('../services/emailService');
+const db = require('../config/db');
+
+// Signup functionality
+const signup = async (req, res) => {
+  const { first_name, last_name, email, password, user_type, otp } = req.body;
+
+  if (!first_name || !last_name || !email || !password || !user_type || !otp) {
+    return res.status(400).json({ message: 'Please provide all required fields' });
+  }
+
+  try {
+    // Check if the user already exists
+    const [userExist] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (userExist.length > 0) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Insert new user into the database
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    const query = 'INSERT INTO users (first_name, last_name, email, password, user_type, otp) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [first_name, last_name, email, hashedPassword, user_type, otp];
+
+    await db.query(query, values);
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Login functionality
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Check if user exists
+    const [user] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (user.length === 0) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    // Check if password matches
+    const match = await bcrypt.compare(password, user[0].password);
+    if (!match) {
+      return res.status(400).json({ message: 'Incorrect password' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: user[0].id, userType: user[0].user_type }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ message: 'Login successful', token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// OTP verification
+const verifyOtp = async (req, res) => {
+  const { email, otp } = req.body;
+
+  try {
+    const [user] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (user.length === 0) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    if (user[0].otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    // Update user verification status
+    await db.query('UPDATE users SET is_verified = 1 WHERE email = ?', [email]);
+
+    res.json({ message: 'OTP verified successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+module.exports = { signup, login, verifyOtp };
