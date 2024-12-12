@@ -68,12 +68,17 @@ A robust Speaker Booking System built with Node.js, Express, MySQL, and JWT for 
 
    ```env
    PORT=5000
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=yourpassword
-   DB_NAME=speaker_booking
-   JWT_SECRET=yourjwtsecret
-   OTP_EXPIRATION=10m
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=yourpassword
+DB_NAME=speaker_booking
+JWT_SECRET=yourjwtsecret
+EMAIL_USER=your-email
+EMAIL_PASS=your-email-password
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_REDIRECT_URI=your-google-redirect-uri
+GOOGLE_REFRESH_TOKEN=your-google-refresh-token
    ```
 
 4. Set up the MySQL database:
