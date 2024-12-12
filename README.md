@@ -1,203 +1,196 @@
 A robust Speaker Booking System built with Node.js, Express, MySQL, and JWT for authentication. This platform enables users to create profiles, book speakers, manage speaker sessions, and handle authentication securely.
 
-Table of Contents
+## Table of Contents
 
-Features
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Database Schema](#database-schema)
+- [API Endpoints](#api-endpoints)
+- [Usage](#usage)
+- [Future Enhancements](#future-enhancements)
+- [License](#license)
 
-Tech Stack
+---
 
-Installation
+## Features
 
-Database Schema
+1. **User Authentication:**
+   - Signup/Login with JWT-based authentication.
+   - OTP verification for new users.
 
-API Endpoints
+2. **Role Management:**
+   - Distinguish between regular users and speakers.
 
-Usage
+3. **Speaker Profiles:**
+   - Creation and management of speaker profiles.
+   - Expertise and pricing details.
 
+4. **Booking System:**
+   - Users can book sessions with speakers.
 
-(A)Features
+5. **Protected Endpoints:**
+   - Secure APIs with role-based access control.
 
-User Authentication:
-Signup/Login with JWT-based authentication.
-OTP verification for new users.
+6. **Database Integration:**
+   - Seamlessly integrates with MySQL for data storage.
 
-Role Management:
-Distinguish between regular users and speakers.
+## Tech Stack
 
-Speaker Profiles:
-Creation and management of speaker profiles.
-Expertise and pricing details.
+- **Backend Framework:** Node.js, Express.js
+- **Database:** MySQL
+- **Authentication:** JWT (JSON Web Token)
+- **Other Libraries:** Bcrypt, MySQL2, Dotenv
 
-Booking System:
-Users can book sessions with speakers.
+## Installation
 
-Protected Endpoints:
+### Prerequisites
 
-Secure APIs with role-based access control.
-Database Integration:
-Seamlessly integrates with MySQL for data storage.
+- Node.js (v22.12.0 or compatible)
+- MySQL (installed and running)
 
-
-(B)Tech Stack
-
-Backend Framework: Node.js, Express.js
-
-Database: MySQL
-
-Authentication: JWT (JSON Web Token)
-
-Other Libraries: Bcrypt, MySQL2, Dotenv
-
-(B)Installation
-
-Prerequisites
-
-Node.js (v22.12.0 or compatible)
-MySQL (installed and running)
-
-Steps
+### Steps
 
 1. Clone the repository:
-git clone https://github.com/yourusername/speaker-booking.git
-cd speaker-booking
+
+   ```bash
+   git clone https://github.com/yourusername/speaker-booking.git
+   cd speaker-booking
+   ```
 
 2. Install dependencies:
-npm install
 
-3. Set up the .env file:
+   ```bash
+   npm install
+   ```
 
-Create a .env file in the root directory and add the following:
+3. Set up the `.env` file:
 
-PORT=5000
+   Create a `.env` file in the root directory and add the following:
 
-DB_HOST=localhost
-
-DB_USER=root
-
-DB_PASSWORD=yourpassword
-
-DB_NAME=speaker_booking
-
-JWT_SECRET=yourjwtsecret
+   ```env
+   PORT=5000
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=yourpassword
+   DB_NAME=speaker_booking
+   JWT_SECRET=yourjwtsecret
+   OTP_EXPIRATION=10m
+   ```
 
 4. Set up the MySQL database:
 
-Create a new database:
-CREATE DATABASE speaker_booking;
-
-Import the provided schema (e.g., schema.sql):
-mysql -u root -p speaker_booking < schema.sql
+   - Create a new database:
+     ```sql
+     CREATE DATABASE speaker_booking;
+     ```
+   - Import the provided schema (e.g., `schema.sql`):
+     ```bash
+     mysql -u root -p speaker_booking < schema.sql
+     ```
 
 5. Start the server:
-node server.js
+
+   ```bash
+   node server.js
+   ```
 
 6. Access the application:
-Base URL: http://localhost:5000
 
-(D)Database Schema
+   - Base URL: `http://localhost:5000`
 
-Tables:
-(i) users:
+---
 
-id, first_name, last_name, email, password, user_type, otp, is_verified
+## Database Schema
 
-(ii)speaker_profiles:
+### Tables:
 
-id, user_id, expertise, price_per_session
+- **users:**
+  - `id`, `first_name`, `last_name`, `email`, `password`, `user_type`, `otp`, `is_verified`
+- **speaker_profiles:**
+  - `id`, `user_id`, `expertise`, `price_per_session`
+- **bookings:**
+  - `id`, `user_id`, `speaker_id`, `timeslot_id`, `status`
+- **time_slots:**
+  - `id`, `speaker_id`, `date`, `start_time`, `end_time`
 
-(iii)bookings:
+---
 
-id, user_id, speaker_id, timeslot_id, status
+## API Endpoints
 
-(iv)time_slots:
+### Authentication
 
-id, speaker_id, date, start_time, end_time
+1. **Signup:**
+   - `POST /auth/signup`
+   - Body:
+     ```json
+     {
+       "first_name": "John",
+       "last_name": "Doe",
+       "email": "john.doe@example.com",
+       "password": "password123",
+       "user_type": "user"
+     }
+     ```
+
+2. **Login:**
+   - `POST /auth/login`
+   - Body:
+     ```json
+     {
+       "email": "john.doe@example.com",
+       "password": "password123"
+     }
+     ```
+
+3. **Verify OTP:**
+   - `POST /auth/verify`
+   - Body:
+     ```json
+     {
+       "email": "john.doe@example.com",
+       "otp": "123456"
+     }
+     ```
+
+### Speaker Profile
+
+1. **Create Profile:**
+   - `POST /speaker/profile`
+   - Requires Bearer Token (JWT).
+   - Body:
+     ```json
+     {
+       "expertise": "Software Engineering",
+       "price_per_session": 100
+     }
+     ```
+
+2. **Get Profile:**
+   - `GET /speaker/profile/:id`
+
+### Booking
+
+1. **Book a Speaker:**
+   - `POST /booking`
+   - Body:
+     ```json
+     {
+       "speaker_id": 1,
+       "timeslot_id": 2
+     }
+     ```
+
+2. **View Bookings:**
+   - `GET /booking/user`
 
 
-(E)API Endpoints
+## Usage
 
-Authentication
-
-1. Signup:
-
-(i)POST /auth/signup
-
-(ii)Body:
-
-{
-  "first_name": "John",
-  "last_name": "Doe",
-  "email": "john.doe@example.com",
-  "password": "password123",
-  "user_type": "user"
-}
-
-2. Login:
-
-(i)POST /auth/login
-
-(ii)Body:
-
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-
-3. Verify OTP:
-
-(i)POST /auth/verify
-
-(ii)Body:
-
-{
-  "email": "john.doe@example.com",
-  "otp": "123456"
-}
+- Use Postman or a similar API client to test the endpoints.
+- Ensure you include the JWT token for protected routes.
+- Example for creating a speaker profile:
+  1. Login as a speaker to get a JWT token.
+  2. Use the token to authenticate the `POST /speaker/profile` endpoint.
 
 
-Speaker Profile
-
-(1)Create Profile:
-
-(i)POST /speaker/profile
-
-(ii)Requires Bearer Token (JWT).
-
-(iii)Body:
-
-{
-  "expertise": "Software Engineering",
-  "price_per_session": 100
-}
-
-(2)Get Profile:
-
-(i)GET /speaker/profile/:id
-
-Booking
-
-Book a Speaker:
-
-(i)POST /booking
-
-(ii)Body:
-
-{
-  "speaker_id": 1,
-  "timeslot_id": 2
-}
-
-(2)View Bookings:
-
-(i)GET /booking/user
-
-(F)Usage
-
-Use Postman or a similar API client to test the endpoints.
-
-Ensure you include the JWT token for protected routes.
-
-Example for creating a speaker profile:
-Login as a speaker to get a JWT token.
-
-Use the token to authenticate the POST /speaker/profile endpoint.
