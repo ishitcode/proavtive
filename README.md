@@ -181,7 +181,10 @@ Book a Speaker:
 Usage
 
 Use Postman or a similar API client to test the endpoints.
+
 Ensure you include the JWT token for protected routes.
+
 Example for creating a speaker profile:
 Login as a speaker to get a JWT token.
+
 Use the token to authenticate the POST /speaker/profile endpoint.
