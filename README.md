@@ -41,8 +41,11 @@ Seamlessly integrates with MySQL for data storage.
 (B)Tech Stack
 
 Backend Framework: Node.js, Express.js
+
 Database: MySQL
+
 Authentication: JWT (JSON Web Token)
+
 Other Libraries: Bcrypt, MySQL2, Dotenv
 
 (B)Installation
