@@ -8,8 +8,6 @@ A robust Speaker Booking System built with Node.js, Express, MySQL, and JWT for 
 - [Database Schema](#database-schema)
 - [API Endpoints](#api-endpoints)
 - [Usage](#usage)
-- [Future Enhancements](#future-enhancements)
-- [License](#license)
 
 ---
 
