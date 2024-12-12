@@ -3,14 +3,19 @@ A robust Speaker Booking System built with Node.js, Express, MySQL, and JWT for 
 Table of Contents
 
 Features
+
 Tech Stack
+
 Installation
+
 Database Schema
+
 API Endpoints
+
 Usage
 
 
-Features
+(A)Features
 
 User Authentication:
 Signup/Login with JWT-based authentication.
@@ -33,14 +38,14 @@ Database Integration:
 Seamlessly integrates with MySQL for data storage.
 
 
-Tech Stack
+(B)Tech Stack
 
 Backend Framework: Node.js, Express.js
 Database: MySQL
 Authentication: JWT (JSON Web Token)
 Other Libraries: Bcrypt, MySQL2, Dotenv
 
-Installation
+(B)Installation
 
 Prerequisites
 
@@ -86,7 +91,7 @@ node server.js
 6. Access the application:
 Base URL: http://localhost:5000
 
-Database Schema
+(D)Database Schema
 
 Tables:
 (i) users:
@@ -106,7 +111,7 @@ id, user_id, speaker_id, timeslot_id, status
 id, speaker_id, date, start_time, end_time
 
 
-API Endpoints
+(E)API Endpoints
 
 Authentication
 
@@ -183,7 +188,7 @@ Book a Speaker:
 
 (i)GET /booking/user
 
-Usage
+(F)Usage
 
 Use Postman or a similar API client to test the endpoints.
 
