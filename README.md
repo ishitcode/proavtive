@@ -61,10 +61,15 @@ npm install
 Create a .env file in the root directory and add the following:
 
 PORT=5000
+
 DB_HOST=localhost
+
 DB_USER=root
+
 DB_PASSWORD=yourpassword
+
 DB_NAME=speaker_booking
+
 JWT_SECRET=yourjwtsecret
 
 4. Set up the MySQL database:
